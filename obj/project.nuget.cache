@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "V43AKwAzLBE=",
+  "success": true,
+  "projectFilePath": "/Users/amarchuk/Documents/GitHub/DaHOOA_project/Allexgro/Allexgro.csproj",
+  "expectedPackageFiles": [
+    "/Users/amarchuk/.nuget/packages/microsoft.aspnetcore.openapi/9.0.3/microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "/Users/amarchuk/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
