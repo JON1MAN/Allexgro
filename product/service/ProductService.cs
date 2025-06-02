@@ -1,6 +1,14 @@
 
 public class ProductService : IProductService
 {
+
+    private readonly IProductRepository _productRepository;
+
+    public ProductService(IProductRepository productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
     public Product CreateProduct(Product request)
     {
         Product product = request;
@@ -30,5 +38,17 @@ public class ProductService : IProductService
     {
         Product product = request;
         return product;
+    }
+
+    public ICollection<ProductCategory> FindAllProductCategories()
+    {
+        var productCategories = _productRepository.GetProductCategories();
+
+        if (productCategories == null)
+        {
+            return null;
+        }
+
+        return productCategories;
     }
 }

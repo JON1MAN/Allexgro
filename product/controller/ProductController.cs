@@ -3,16 +3,20 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ProductController : ControllerBase{
+[Route("api/v1/[controller]")]
+public class ProductController : ControllerBase
+{
     private readonly IProductService productService;
 
-    public ProductController(IProductService service) {
+    public ProductController(IProductService service)
+    {
         productService = service;
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Product> FindById([FromRoute] int id) {
+    [ProducesResponseType(200)]
+    public ActionResult<Product> FindById([FromRoute] int id)
+    {
         var product = productService.FindById(id);
         if (product == null)
             return NotFound();
@@ -21,18 +25,21 @@ public class ProductController : ControllerBase{
     }
 
     [HttpGet()]
-    public ActionResult<List<Product>> FindAll() {
+    public ActionResult<List<Product>> FindAll()
+    {
         var products = productService.FindAll();
         return Ok(products);
     }
 
-    [HttpPost("{id}")]
-    public ActionResult<Product> UpdateProduct(
-        [FromRoute] int id,
-        Product request
-    ) {
-        var updatedProduct = productService.UpdateProduct(id, request);
-        return Ok(updatedProduct);
+    [HttpGet("product-category")]
+    [ProducesResponseType(200)]
+    public ActionResult<ProductType> FindAllProductTypes()
+    {
+        var response = productService.FindAllProductCategories();
+        if (response == null)
+        {
+            return NotFound("There is no product categories");
+        }
+        return Ok(response);
     }
-
 }

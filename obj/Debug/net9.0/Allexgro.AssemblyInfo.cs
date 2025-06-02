@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Allexgro")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63fa75f3ba413ea8871fecc46279b86f4db20880")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe20e221193a45076758bb25a67a1c6a5e66fd10")]
 [assembly: System.Reflection.AssemblyProductAttribute("Allexgro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Allexgro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
