@@ -51,4 +51,30 @@ public class ProductService : IProductService
 
         return productCategories;
     }
+
+    public ICollection<ProductType> FindProductTypesForProductCategory(int productCategoryId)
+    {
+        var productTypes = _productRepository.GetProductTypesForProductCategory(productCategoryId);
+
+        if (productTypes == null)
+        {
+            Console.WriteLine("null");
+            return null;
+        }
+
+        return productTypes;
+    }
+
+    public ICollection<ProductAttributeKey> FindProductAttributeKeysForProductType(int productTypeId)
+    {
+        var ProductAttributeKeys = _productRepository.GetProductAttributeKeysForProductType(productTypeId);
+
+        if (ProductAttributeKeys == null)
+        {
+            Console.WriteLine("null");
+            return null;
+        }
+
+        return ProductAttributeKeys;
+    }
 }

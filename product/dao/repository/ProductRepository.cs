@@ -1,6 +1,7 @@
 
 
 using System.Threading.Tasks;
+using Microsoft.Build.Framework;
 
 public class ProductRepository : IProductRepository
 {
@@ -24,5 +25,19 @@ public class ProductRepository : IProductRepository
     public ICollection<ProductCategory> GetProductCategories()
     {
         return _context.ProductCategories.OrderBy(category => category.Name).ToList();
+    }
+
+    public ICollection<ProductType> GetProductTypesForProductCategory(int productCategoryId)
+    {
+        return _context.ProductTypes
+            .Where(pt => pt.ProductCategoryId == productCategoryId)
+            .ToList();
+    }
+
+    public ICollection<ProductAttributeKey> GetProductAttributeKeysForProductType(int productTypeId)
+    {
+        return _context.ProductAttributeKeys
+        .Where(at => at.ProductTypeId == productTypeId)
+        .ToList();
     }
 }
