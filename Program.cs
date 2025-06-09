@@ -30,6 +30,9 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+//Mappers
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 
 
@@ -49,7 +52,7 @@ if (app.Environment.IsDevelopment())
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseHttpsRedirection();    
+    app.UseHttpsRedirection();
 }
 
 app.UseCors(FrontendCors);
