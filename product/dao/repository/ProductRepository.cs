@@ -40,4 +40,10 @@ public class ProductRepository : IProductRepository
         .Where(at => at.ProductTypeId == productTypeId)
         .ToList();
     }
+
+    public void SaveProduct(Product product)
+    {
+        _context.Products.Add(product);
+        _context.SaveChanges();
+    }
 }

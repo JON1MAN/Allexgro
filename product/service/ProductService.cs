@@ -1,17 +1,22 @@
 
+using AutoMapper;
+
 public class ProductService : IProductService
 {
 
     private readonly IProductRepository _productRepository;
+    private readonly IMapper _productMapper;
 
-    public ProductService(IProductRepository productRepository)
+    public ProductService(IProductRepository productRepository, IMapper mapper)
     {
         _productRepository = productRepository;
+        _productMapper = mapper;
     }
 
-    public Product CreateProduct(Product request)
+    public Product CreateProduct(ProductCreateDTO request)
     {
-        Product product = request;
+        Product product = _productMapper.Map<Product>(request);
+        _productRepository.SaveProduct(product);
         return product;
     }
 
