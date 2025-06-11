@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -35,6 +36,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public ActionResult<ProductDTO> CreateProduct([FromBody] ProductCreateDTO request)
     {
         var response = _productService.CreateProduct(request);
@@ -42,6 +44,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("product-categories")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ProducesResponseType(200)]
     public ActionResult<List<ProductCategory>> FindAllProductCategories()
     {
@@ -54,6 +57,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("product-categories/{categoryId}/product-types")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ProducesResponseType(200)]
     public ActionResult<List<ProductType>> FindProductTypesByCategory(int categoryId)
     {
@@ -66,6 +70,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("product-categories/product-types/{typeId}/attributes")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ProducesResponseType(200)]
     public ActionResult<List<ProductAttributeKey>> FindProductAttributeKeysForProductType(int typeId)
     {
