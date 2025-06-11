@@ -1,8 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-var  FrontendCors = "AllowFrontendCors";
+var FrontendCors = "AllowFrontendCors";
+var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
 
 
 // Add services to the container.
@@ -25,6 +29,13 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IJWTService, JWTService>();
+
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders();
+
 //DATABASE
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -33,7 +44,37 @@ builder.Services.AddDbContext<DataContext>(options =>
 //Mappers
 builder.Services.AddAutoMapper(typeof(Program));
 
+//JWT
+builder.Services.AddIdentityCore<User>(cfg =>
+  {
+    cfg.User.RequireUniqueEmail = true;
+  })
+.AddEntityFrameworkStores<DataContext>();
 
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = "Allexgro.Backend",
+            ValidAudience = "Allexgro.Frontend",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT_SECRET_KEY))
+        };
+    });
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt")
+);
+
+builder.Services.AddSingleton(sp =>
+    sp.GetRequiredService<IOptions<JwtSettings>>().Value
+);
+
+//Context Accessor
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();
@@ -56,6 +97,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseCors(FrontendCors);
+app.UseAuthorization();
+app.UseAuthentication();
 app.MapControllers();
 
 app.Run();
