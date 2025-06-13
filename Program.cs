@@ -26,11 +26,19 @@ builder.Services.AddCors(options =>
                       });
 });
 
+//Product related
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+//Auth with jwt
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJWTService, JWTService>();
+
+//User related
+builder.Services.AddScoped<IUserService, UserService>();
+
+//Security utils
+builder.Services.AddScoped<ISecurityUtils, SecurityUtils>();
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
