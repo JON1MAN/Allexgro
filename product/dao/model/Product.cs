@@ -6,10 +6,10 @@ public class Product
     public int Amount { get; set; }
     public int ProductCategoryId { get; set; }
     public int ProductTypeId { get; set; }
-    public ProductCategory ProductCategory { get; set; } = null!;
-    public ProductType ProductType { get; set; } = null!;
+    public ProductCategory ProductCategory { get; set; }
+    public ProductType ProductType { get; set; }
     public ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
-    public int UserId;
+    public int SellerId;
 
     public Product() { }
 
