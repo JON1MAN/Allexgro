@@ -22,21 +22,12 @@ public class ProductService : IProductService
 
     public Product FindById(int id)
     {
-        Product product = new Product();
-        product.Id = 1;
-        return product;
+        return _productRepository.GetProductById(id);
     }
 
-    public List<Product> FindAll()
+    public ICollection<Product> FindAll()
     {
-        List<Product> products = new List<Product>{
-            new Product(1, "keyborad"),
-            new Product(2, "laptop"),
-            new Product(3, "nike air force"),
-            new Product(4, "white table"),
-            new Product(5, "baseball cap")
-        };
-        return products;
+        return _productRepository.GetProducts();
     }
 
     public Product UpdateProduct(int productId, Product request)

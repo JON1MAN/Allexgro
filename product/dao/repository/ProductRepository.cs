@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
 
 public class ProductRepository : IProductRepository
 {
@@ -17,9 +18,15 @@ public class ProductRepository : IProductRepository
         return _context.Products.OrderBy(product => product.Id).ToList();
     }
 
-    public Product GetProductById(int productId)
+    public Product? GetProductById(int productId)
     {
-        return _context.Products.Find(productId);
+        return _context.Products
+            .Include(p => p.ProductCategory)
+            .Include(p => p.ProductType)
+            .Include(p => p.ProductAttributes)
+            .Include(p => p.ProductAttributes)
+                .ThenInclude(pa => pa.AttributeKey)
+            .FirstOrDefault(p => p.Id == productId);
     }
 
     public ICollection<ProductCategory> GetProductCategories()

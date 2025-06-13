@@ -19,19 +19,27 @@ public class ProductController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(200)]
-    public ActionResult<Product> FindById([FromRoute] int id)
+    public ActionResult<ProductDTO> FindById([FromRoute] int id)
     {
         var product = _productService.FindById(id);
         if (product == null)
             return NotFound();
 
-        return Ok(product);
+        return Ok(_productMapper.Map<ProductDTO>(product));
     }
 
     [HttpGet()]
     public ActionResult<List<Product>> FindAll()
     {
         var products = _productService.FindAll();
+
+        var response = new List<ProductDTO>();
+
+        foreach (var product in products)
+        {
+            response.Add(_productMapper.Map<ProductDTO>(product));
+        }
+
         return Ok(products);
     }
 
