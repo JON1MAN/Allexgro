@@ -10,11 +10,13 @@ public class ProductController : ControllerBase
 {
     private readonly IProductService _productService;
     private readonly IMapper _productMapper;
+    private readonly ISecurityUtils _securityUtils;
 
-    public ProductController(IProductService service, IMapper productMapper)
+    public ProductController(IProductService service, IMapper productMapper, ISecurityUtils securityUtils)
     {
         _productService = service;
         _productMapper = productMapper;
+        _securityUtils = securityUtils;
     }
 
     [HttpGet("{id}")]
@@ -47,7 +49,8 @@ public class ProductController : ControllerBase
     [Authorize(AuthenticationSchemes = "Bearer")]
     public ActionResult<ProductDTO> CreateProduct([FromBody] ProductCreateDTO request)
     {
-        var response = _productService.CreateProduct(request);
+        var sellerId = _securityUtils.getCurrentLoggedUserId();
+        var response = _productService.CreateProduct(request, sellerId);
         return Ok(_productMapper.Map<ProductDTO>(response));
     }
 

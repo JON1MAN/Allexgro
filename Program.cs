@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var FrontendCors = "AllowFrontendCors";
@@ -81,6 +82,17 @@ builder.Services.AddSingleton(sp =>
     sp.GetRequiredService<IOptions<JwtSettings>>().Value
 );
 
+//Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/app-.log", rollingInterval: RollingInterval.Day)
+    //.WriteTo.Seq("http://localhost:5341")  // Optional: if using Seq
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 //Context Accessor
 builder.Services.AddHttpContextAccessor();
 
@@ -104,6 +116,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseSerilogRequestLogging();
 app.UseCors(FrontendCors);
 app.UseAuthorization();
 app.UseAuthentication();
