@@ -19,6 +19,7 @@ public class ProductService : IProductService
     {
         _logger.LogInformation("Creating a product by user with id: {sellerId}", sellerId);
         Product product = _productMapper.Map<Product>(request);
+        product.UserId = sellerId;
         _productRepository.SaveProduct(product);
         return product;
     }

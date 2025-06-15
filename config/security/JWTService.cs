@@ -27,7 +27,7 @@ public class JWTService : IJWTService
             issuer: _settings.Issuer,
             audience: _settings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(60),
+            expires: DateTime.UtcNow.AddDays(30),
             signingCredentials: creds
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
