@@ -8,4 +8,5 @@ public interface IProductService
     public ICollection<ProductCategory> FindAllProductCategories();
     public ICollection<ProductType> FindProductTypesForProductCategory(int productCategoryId);
     public ICollection<ProductAttributeKey> FindProductAttributeKeysForProductType(int productTypeId);
+    public ICollection<Product> FindProductsForLoggedUser(string sellerId);
 }

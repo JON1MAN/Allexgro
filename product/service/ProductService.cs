@@ -78,10 +78,15 @@ public class ProductService : IProductService
 
         if (ProductAttributeKeys == null)
         {
-            Console.WriteLine("null");
             return null;
         }
 
         return ProductAttributeKeys;
+    }
+
+    public ICollection<Product> FindProductsForLoggedUser(string sellerId)
+    {
+        _logger.LogInformation("Fetching products for logged user: {sellerId}", sellerId);
+        return _productRepository.GetProductsForLoggedUser(sellerId);
     }
 }

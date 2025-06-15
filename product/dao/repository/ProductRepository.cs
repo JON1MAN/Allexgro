@@ -53,4 +53,11 @@ public class ProductRepository : IProductRepository
         _context.Products.Add(product);
         _context.SaveChanges();
     }
+
+    public ICollection<Product> GetProductsForLoggedUser(string sellerId)
+    {
+        return _context.Products
+        .Where(product => product.UserId == sellerId)
+        .ToList();
+    }
 }

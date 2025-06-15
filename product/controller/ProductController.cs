@@ -35,14 +35,26 @@ public class ProductController : ControllerBase
     {
         var products = _productService.FindAll();
 
-        var response = new List<ProductDTO>();
+        var response = mapToListDTO(products);
 
-        foreach (var product in products)
+        return Ok(response);
+    }
+
+    [HttpGet("my")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public ActionResult<List<Product>> FindProductsForLoggedUser()
+    {
+        string? userId = _securityUtils.getCurrentLoggedUserId();
+        var products = (userId != null) ? _productService.FindProductsForLoggedUser(userId) : null;
+
+        if (products == null)
         {
-            response.Add(_productMapper.Map<ProductDTO>(product));
+            return NotFound("There is no products for user with id: " + userId);
         }
 
-        return Ok(products);
+        var response = mapToListDTO(products);
+
+        return Ok(response);
     }
 
     [HttpPost]
@@ -91,5 +103,17 @@ public class ProductController : ControllerBase
             return NotFound("There is no attributes for provided product type id");
         }
         return Ok(response);
+    }
+
+    private ICollection<ProductDTO> mapToListDTO(ICollection<Product> products)
+    {
+        var response = new List<ProductDTO>();
+
+        foreach (var product in products)
+        {
+            response.Add(_productMapper.Map<ProductDTO>(product));
+        }
+
+        return response;
     }
 }

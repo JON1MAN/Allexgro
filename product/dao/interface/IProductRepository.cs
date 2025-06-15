@@ -7,5 +7,6 @@ public interface IProductRepository
     ICollection<ProductType> GetProductTypesForProductCategory(int productCategoryId);
     ICollection<ProductAttributeKey> GetProductAttributeKeysForProductType(int productTypeId);
     void SaveProduct(Product product);
+    public ICollection<Product> GetProductsForLoggedUser(string sellerId);
 
 }
