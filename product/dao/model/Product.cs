@@ -9,8 +9,8 @@ public class Product
     public ProductCategory ProductCategory { get; set; }
     public ProductType ProductType { get; set; }
     public ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
-    public int SellerId;
-
+    public string UserId { get; set; }
+    public User User { get; set; } 
     public Product() { }
 
     public Product(int id, string name)

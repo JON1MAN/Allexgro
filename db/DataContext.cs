@@ -16,4 +16,14 @@ public class DataContext : IdentityDbContext<User>
     public DbSet<ProductAttributeKey> ProductAttributeKeys { get; set; }
     public DbSet<User> Users { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Product>()
+            .HasOne(p => p.User)
+            .WithMany(u => u.SellerProducts)
+            .HasForeignKey(p => p.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 }
