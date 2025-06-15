@@ -1,16 +1,17 @@
 
 public class UserService : IUserService
 {
-    private readonly ISecurityUtils _securityUtils;
     private readonly ILogger<UserService> _logger;
+    private readonly IUserRepository _userRepository;
 
-    public UserService(ISecurityUtils securityUtils, ILogger<UserService> logger)
+    public UserService(ILogger<UserService> logger, IUserRepository userRepository)
     {
-        _securityUtils = securityUtils;
         _logger = logger;
+        _userRepository = userRepository;
     }
-    public string? getCurrentLoggedUserId()
+    public User? getCurrentLoggedUserProfileData(string userId)
     {
-        return _securityUtils.getCurrentLoggedUserId();
+        _logger.LogInformation("Fetching profile data for user: {userId}", userId);
+        return _userRepository.FindCurrentLoggedUserProfileData(userId);
     }
 }

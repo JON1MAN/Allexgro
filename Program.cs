@@ -37,6 +37,7 @@ builder.Services.AddScoped<IJWTService, JWTService>();
 
 //User related
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Security utils
 builder.Services.AddScoped<ISecurityUtils, SecurityUtils>();

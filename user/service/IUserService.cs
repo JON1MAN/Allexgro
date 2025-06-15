@@ -1,5 +1,5 @@
 
 public interface IUserService
 {
-    public string? getCurrentLoggedUserId();
+    public User getCurrentLoggedUserProfileData(string userId);
 }

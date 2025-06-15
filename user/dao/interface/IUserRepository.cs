@@ -1,5 +1,5 @@
 
 public interface IUserRepository
 {
-    public ICollection<Product> findMyProducts(string sellerId);
+    public User? FindCurrentLoggedUserProfileData(string userId);
 }
