@@ -39,6 +39,10 @@ builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+//Seacrh
+builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<ISearchRepository, SearchRepository>();
+
 //Security utils
 builder.Services.AddScoped<ISecurityUtils, SecurityUtils>();
 
@@ -48,8 +52,10 @@ builder.Services.AddIdentity<User, IdentityRole>()
 
 //DATABASE
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.EnableSensitiveDataLogging();
+});
 
 //Mappers
 builder.Services.AddAutoMapper(typeof(Program));
