@@ -7,11 +7,13 @@ using Serilog;
 using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
-var FrontendCors = "AllowFrontendCors";
-var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
+Env.Load();
 
 //ENV variables
-Env.Load();
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
+
+var FrontendCors = "AllowFrontendCors";
+var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
