@@ -4,11 +4,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 var FrontendCors = "AllowFrontendCors";
 var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
 
+//ENV variables
+Env.Load();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
