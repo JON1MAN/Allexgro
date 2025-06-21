@@ -5,15 +5,21 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using DotNetEnv;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
+//ENV variables
 Env.Load();
 
-//ENV variables
-builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
-
+//FRONTEND 
 var FrontendCors = "AllowFrontendCors";
-var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
+builder.Services.Configure<FrontendSettings>(builder.Configuration.GetSection("FrontendSettings"));
+
+//Stripe
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
+builder.Services.AddScoped<IStripeService, StripeService>();
+builder.Services.AddScoped<IStripeUserAccountDetailsRepository, StripeUserAccountDetailsRepository>();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,7 +32,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: FrontendCors,
                       policy  =>
                       {
-                          policy.WithOrigins("http://localhost:5173")
+                          policy.WithOrigins("http://localhost:5173", "https://b5e7-149-156-124-21.ngrok-free.app")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -66,6 +72,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 
 //JWT
+var JWT_SECRET_KEY = builder.Configuration["Jwt:Secret"];
 builder.Services.AddIdentityCore<User>(cfg =>
   {
     cfg.User.RequireUniqueEmail = true;
@@ -100,7 +107,6 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.File("Logs/app-.log", rollingInterval: RollingInterval.Day)
-    //.WriteTo.Seq("http://localhost:5341")  // Optional: if using Seq
     .CreateLogger();
 
 builder.Host.UseSerilog();
