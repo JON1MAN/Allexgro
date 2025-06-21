@@ -15,6 +15,7 @@ public class DataContext : IdentityDbContext<User>
     public DbSet<ProductAttribute> ProductAttributes { get; set; }
     public DbSet<ProductAttributeKey> ProductAttributeKeys { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<StripeUserAccountDetails> StripeUserAccountDetails { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -25,5 +26,10 @@ public class DataContext : IdentityDbContext<User>
             .HasForeignKey(p => p.UserId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.stripeUserAccountDetails)
+            .WithOne(s => s.User)
+            .HasForeignKey<StripeUserAccountDetails>(s => s.userId);
     }
 }

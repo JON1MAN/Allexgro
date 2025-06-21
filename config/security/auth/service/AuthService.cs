@@ -5,16 +5,19 @@ public class AuthService : IAuthService
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     private readonly IJWTService _jwtService;
+    private readonly IStripeService _stripeService;
 
     public AuthService(
         SignInManager<User> signInManager,
         UserManager<User> userManager,
-        IJWTService jwtService
+        IJWTService jwtService,
+        IStripeService stripeService
     )
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _jwtService = jwtService;
+        _stripeService = stripeService;
     }
 
     public async Task<Response<TokenResponseDTO>> LoginUser(UserLoginDTO dto)
@@ -68,13 +71,20 @@ public class AuthService : IAuthService
         };
 
         var result = await _userManager.CreateAsync(user, dto.Password);
+        StripeUserAccountDetails stripeUserAccountDetails = null;
+
+        if (result != null)
+        {
+            stripeUserAccountDetails = await _stripeService.createStripeAccount(user);
+        }
 
         return new Response<TokenResponseDTO>()
         {
             isSuccessful = result.Succeeded,
             Body = new TokenResponseDTO
             {
-                AccessToken = result.Succeeded ? _jwtService.generateJWT(user) : String.Empty
+                AccessToken = result.Succeeded ? _jwtService.generateJWT(user) : String.Empty,
+                StripeOnboardingUrl = stripeUserAccountDetails.OnboardingAccountLinkUrl != null ? stripeUserAccountDetails.OnboardingAccountLinkUrl : null
             },
             Message = result.Succeeded ? "User Registration Successfull!" : "User Registration Failed!" + string.Join("; ", result.Errors.Select(e => e.Description))
         };
