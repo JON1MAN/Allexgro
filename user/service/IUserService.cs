@@ -1,5 +1,6 @@
 
 public interface IUserService
 {
-    public User getCurrentLoggedUserProfileData(string userId);
+    public Task<UserDTO> getCurrentLoggedUserProfileData(string userId);
+    public Task<User> updateCurrentLoggedUserProfileData(UserEditDTO userEditDTO, string userId);
 }

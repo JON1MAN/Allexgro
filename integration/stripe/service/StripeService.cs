@@ -29,6 +29,24 @@ public class StripeService : IStripeService
         return await CreateAccountLink(stripeAccount.Id, linkType);
     }
 
+    public async Task<LoginLink> CreateAccountUpdateLink(StripeUserAccountDetails stripeAccount)
+    {
+        _logger.LogInformation("Creating new stripe link of type: {type}, for stripe account id: {id}",
+            AccountLinkType.account_update,
+            stripeAccount.stripeAccountId
+        );
+
+        var stripeClient = new Stripe.StripeClient(_stripeSettings.SecretKey);
+        var service = new AccountLoginLinkService(stripeClient);
+
+        LoginLink loginLink = service.Create(stripeAccount.stripeAccountId);
+
+        stripeAccount.UpdateAccountLinkUrl = loginLink.Url;
+        await _stripeUserAccountDetailsRepository.UpdateAsync(stripeAccount);
+
+        return loginLink;
+    }
+
     public async Task<AccountLink> CreateAccountLink(string stripeAccountId, AccountLinkType linkType)
     {
         _logger.LogInformation("Creating new account link of type:{linkType}; for stripeAccountId: {stripeAccountId}",
@@ -68,7 +86,6 @@ public class StripeService : IStripeService
         Account account = service.Create(options);
 
         var onboardingAccountLink = await CreateAccountLink(account, AccountLinkType.account_onboarding);
-        var updateAccountLink = await CreateAccountLink(account, AccountLinkType.account_update);
 
         var stripeUserAccountDetails = new StripeUserAccountDetails()
         {
@@ -76,9 +93,7 @@ public class StripeService : IStripeService
             User = user,
             stripeAccountId = account.Id,
             OnboardingAccountLinkUrl = onboardingAccountLink.Url,
-            OnboardingAccountLinkExpiration = onboardingAccountLink.ExpiresAt,
-            UpdateAccountLinkUrl = updateAccountLink.Url,
-            UpdateAccountLinkExpiration = updateAccountLink.ExpiresAt
+            OnboardingAccountLinkExpiration = onboardingAccountLink.ExpiresAt
         };
 
         await _stripeUserAccountDetailsRepository.SaveAsync(stripeUserAccountDetails);

@@ -15,4 +15,10 @@ public class StripeUserAccountDetailsRepository : IStripeUserAccountDetailsRepos
         _context.StripeUserAccountDetails.Add(stripeUserAccountDetails);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateAsync(StripeUserAccountDetails stripeUserAccountDetails)
+    {
+        _context.StripeUserAccountDetails.Update(stripeUserAccountDetails);
+        await _context.SaveChangesAsync();
+    }
 }

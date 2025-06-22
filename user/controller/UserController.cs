@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using Microsoft.Extensions.Options;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -24,10 +25,24 @@ public class UserController : ControllerBase
     [HttpGet("me")]
     [ProducesResponseType(200)]
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public ActionResult<UserDTO> FindById([FromRoute] int id)
+    public async Task<ActionResult<UserEditDTO>> FindById([FromRoute] int id)
     {
         var userId = _securityUtils.getCurrentLoggedUserId();
-        var response = _userService.getCurrentLoggedUserProfileData(userId);
+        var response = await _userService.getCurrentLoggedUserProfileData(userId);
+
+        if (response == null)
+            return NotFound();
+
+        return Ok(response);
+    }
+
+    [HttpPut]
+    [ProducesResponseType(200)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public async Task<ActionResult<UserDTO>> UpdateCurrentLoggedUser([FromBody] UserEditDTO request)
+    {
+        var userId = _securityUtils.getCurrentLoggedUserId();
+        var response = await _userService.updateCurrentLoggedUserProfileData(request, userId);
 
         if (response == null)
             return NotFound();
