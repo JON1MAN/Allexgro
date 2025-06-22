@@ -2,6 +2,9 @@ using Stripe;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using System.Diagnostics;
+using Stripe.Climate;
 
 public class StripeService : IStripeService
 {
@@ -99,5 +102,49 @@ public class StripeService : IStripeService
         await _stripeUserAccountDetailsRepository.SaveAsync(stripeUserAccountDetails);
 
         return stripeUserAccountDetails;
+    }
+
+    public async Task<StripeProductDetails> createStripeProduct(Product product)
+    {
+        _logger.LogInformation("Creating a StripeProduct for product with id: {productId}", product.Id);
+
+        var productCreateOptions = new ProductCreateOptions()
+        {
+            Name = product.Name
+        };
+
+        var stripeClient = GetStripeClient();
+        var stripeProductService = new Stripe.ProductService(stripeClient);
+
+        Stripe.Product stripeProduct = stripeProductService.Create(productCreateOptions);
+        Stripe.Price stripePrice = await createStripePriceForProduct(stripeProduct, product);
+
+        return new StripeProductDetails()
+        {
+            StripeProductId = stripeProduct.Id,
+            StripeProductPriceId = stripePrice.Id
+        };
+    }
+
+    public async Task<Price> createStripePriceForProduct(Stripe.Product stripeProduct, Product product)
+    {
+        _logger.LogInformation("Creating a StripePrice for StripeProduct with id: {productId}", stripeProduct.Id);
+        var stripeClient = GetStripeClient();
+
+        var options = new PriceCreateOptions
+        {
+            Currency = "usd",
+            UnitAmount = (long) (product.Price * 100),
+            Product = stripeProduct.Id
+        };
+        var service = new PriceService(stripeClient);
+        Price price = service.Create(options);
+
+        return price;
+    }
+
+    private Stripe.StripeClient GetStripeClient()
+    {
+        return new StripeClient(_stripeSettings.SecretKey);
     }
 }

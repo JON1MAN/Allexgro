@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -59,10 +60,10 @@ public class ProductController : ControllerBase
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public ActionResult<ProductDTO> CreateProduct([FromBody] ProductCreateDTO request)
+    public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] ProductCreateDTO request)
     {
         var sellerId = _securityUtils.getCurrentLoggedUserId();
-        var response = _productService.CreateProduct(request, sellerId);
+        var response = await _productService.CreateProduct(request, sellerId);
         return Ok(_productMapper.Map<ProductDTO>(response));
     }
 

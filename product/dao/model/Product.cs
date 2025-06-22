@@ -11,6 +11,8 @@ public class Product
     public ICollection<ProductAttribute> ProductAttributes { get; set; } = new List<ProductAttribute>();
     public string UserId { get; set; }
     public User User { get; set; } 
+    public string? StripeProductId { get; set; }
+    public string? StripeProductPriceId { get; set; }
     public Product() { }
 
     public Product(int id, string name)

@@ -1,4 +1,5 @@
 
+using System.Threading.Tasks;
 using AutoMapper;
 
 public class ProductService : IProductService
@@ -7,19 +8,30 @@ public class ProductService : IProductService
     private readonly IProductRepository _productRepository;
     private readonly IMapper _productMapper;
     private readonly ILogger<ProductService> _logger;
+    private readonly IStripeService _stripeService;
 
-    public ProductService(IProductRepository productRepository, IMapper mapper, ILogger<ProductService> logger)
-    {
+    public ProductService(
+        IProductRepository productRepository,
+        IMapper mapper,
+        ILogger<ProductService> logger,
+        IStripeService stripeService
+    ){
         _productRepository = productRepository;
         _productMapper = mapper;
         _logger = logger;
+        _stripeService = stripeService;
     }
 
-    public Product CreateProduct(ProductCreateDTO request, string sellerId)
+    public async Task<Product> CreateProduct(ProductCreateDTO request, string sellerId)
     {
         _logger.LogInformation("Creating a product by user with id: {sellerId}", sellerId);
         Product product = _productMapper.Map<Product>(request);
         product.UserId = sellerId;
+        StripeProductDetails stripeProductDetails = await _stripeService.createStripeProduct(product);
+
+        product.StripeProductId = stripeProductDetails.StripeProductId;
+        product.StripeProductPriceId = stripeProductDetails.StripeProductPriceId;
+        
         _productRepository.SaveProduct(product);
         return product;
     }
