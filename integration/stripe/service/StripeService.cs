@@ -67,15 +67,18 @@ public class StripeService : IStripeService
         var service = new AccountService(stripeClient);
         Account account = service.Create(options);
 
-        var accountLink = await CreateAccountLink(account, AccountLinkType.account_onboarding);
+        var onboardingAccountLink = await CreateAccountLink(account, AccountLinkType.account_onboarding);
+        var updateAccountLink = await CreateAccountLink(account, AccountLinkType.account_update);
 
         var stripeUserAccountDetails = new StripeUserAccountDetails()
         {
             userId = user.Id,
             User = user,
             stripeAccountId = account.Id,
-            OnboardingAccountLinkUrl = accountLink.Url,
-            OnboardingAccountLinkExpiration = accountLink.ExpiresAt
+            OnboardingAccountLinkUrl = onboardingAccountLink.Url,
+            OnboardingAccountLinkExpiration = onboardingAccountLink.ExpiresAt,
+            UpdateAccountLinkUrl = updateAccountLink.Url,
+            UpdateAccountLinkExpiration = updateAccountLink.ExpiresAt
         };
 
         await _stripeUserAccountDetailsRepository.SaveAsync(stripeUserAccountDetails);

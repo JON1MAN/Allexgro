@@ -12,4 +12,6 @@ public class StripeUserAccountDetails
     public string stripeAccountId { get; set; }
     public string OnboardingAccountLinkUrl { get; set; }
     public DateTime OnboardingAccountLinkExpiration { get; set; }
+    public string UpdateAccountLinkUrl { get; set; }
+    public DateTime UpdateAccountLinkExpiration { get; set; }
 }
