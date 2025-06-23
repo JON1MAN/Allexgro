@@ -21,6 +21,9 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 builder.Services.AddScoped<IStripeService, StripeService>();
 builder.Services.AddScoped<IStripeUserAccountDetailsRepository, StripeUserAccountDetailsRepository>();
 
+//ShoppingCart
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
+
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
