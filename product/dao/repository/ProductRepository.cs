@@ -60,4 +60,12 @@ public class ProductRepository : IProductRepository
         .Where(product => product.UserId == sellerId)
         .ToList();
     }
+
+    public Product Update(Product product)
+    {
+        _context.Update(product);
+        _context.SaveChangesAsync();
+
+        return product;
+    }
 }

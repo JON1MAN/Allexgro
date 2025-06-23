@@ -7,4 +7,5 @@ public interface IStripeService
     public Task<LoginLink> CreateAccountUpdateLink(StripeUserAccountDetails stripeAccount);
     public Task<StripeProductDetails> createStripeProduct(Product product);
     public Task<Price> createStripePriceForProduct(Stripe.Product stripeProduct, Product product);
+    public Task<Stripe.Checkout.Session> CreateCheckoutSession(ShoppingCart shoppingCart, string userId);
 }

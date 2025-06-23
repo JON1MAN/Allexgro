@@ -15,7 +15,8 @@ public class ProductService : IProductService
         IMapper mapper,
         ILogger<ProductService> logger,
         IStripeService stripeService
-    ){
+    )
+    {
         _productRepository = productRepository;
         _productMapper = mapper;
         _logger = logger;
@@ -31,7 +32,7 @@ public class ProductService : IProductService
 
         product.StripeProductId = stripeProductDetails.StripeProductId;
         product.StripeProductPriceId = stripeProductDetails.StripeProductPriceId;
-        
+
         _productRepository.SaveProduct(product);
         return product;
     }
@@ -100,5 +101,19 @@ public class ProductService : IProductService
     {
         _logger.LogInformation("Fetching products for logged user: {sellerId}", sellerId);
         return _productRepository.GetProductsForLoggedUser(sellerId);
+    }
+
+    public void UpdateProductAmounts(ShoppingCart shoppingCart)
+    {
+        _logger.LogInformation("Updating amounts for each product from shoppiong cart");
+        var shoppingCartProducts = shoppingCart.Products;
+
+        foreach (var shoppingCartProduct in shoppingCartProducts)
+        {
+            Product product = FindById(shoppingCartProduct.Id);
+            product.Amount = product.Amount - shoppingCartProduct.Amount;
+
+            _productRepository.Update(product);
+        }
     }
 }

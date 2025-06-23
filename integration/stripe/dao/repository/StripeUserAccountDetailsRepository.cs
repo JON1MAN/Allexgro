@@ -1,5 +1,6 @@
 
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 public class StripeUserAccountDetailsRepository : IStripeUserAccountDetailsRepository
 {
@@ -20,5 +21,11 @@ public class StripeUserAccountDetailsRepository : IStripeUserAccountDetailsRepos
     {
         _context.StripeUserAccountDetails.Update(stripeUserAccountDetails);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<StripeUserAccountDetails> FindByUserId(string userId)
+    {
+        var result = await _context.StripeUserAccountDetails.FirstOrDefaultAsync(details => details.userId == userId);
+        return result;
     }
 }

@@ -10,13 +10,13 @@ public class StripeService : IStripeService
 {
     private readonly StripeSettings _stripeSettings;
     private readonly FrontendSettings _frontendSettings;
-    private readonly ILogger<UserService> _logger;
+    private readonly ILogger<StripeService> _logger;
     private readonly IStripeUserAccountDetailsRepository _stripeUserAccountDetailsRepository;
 
 
     public StripeService(
         IOptions<StripeSettings> stripeSettings,
-        ILogger<UserService> logger,
+        ILogger<StripeService> logger,
         IOptions<FrontendSettings> frontendSettings,
         IStripeUserAccountDetailsRepository stripeUserAccountDetailsRepository
     )
@@ -141,6 +141,64 @@ public class StripeService : IStripeService
         Price price = service.Create(options);
 
         return price;
+    }
+
+    public async Task<Stripe.Checkout.Session> CreateCheckoutSession(ShoppingCart shoppingCart, string userId)
+    {
+        _logger.LogInformation("Creating stripe checkout session for user: {userId}", userId);
+        var stripeClient = GetStripeClient();
+
+        var stripeLineItems = CreateSessionLineItemOptions(shoppingCart);
+        var paymentIntentData = await CreateSessionPaymentIntentDataOptions(shoppingCart, userId);
+
+        var options = new Stripe.Checkout.SessionCreateOptions
+        {
+            Mode = "payment",
+            PaymentIntentData = paymentIntentData,
+            LineItems = stripeLineItems,
+            SuccessUrl = _frontendSettings.LinkToUserProfile,
+            CancelUrl = _frontendSettings.LinkToUserProfile,
+        };
+
+        var service = new Stripe.Checkout.SessionService(stripeClient);
+
+        Stripe.Checkout.Session session = service.Create(options);
+
+        return session;
+    }
+
+    private List<Stripe.Checkout.SessionLineItemOptions> CreateSessionLineItemOptions(ShoppingCart shoppingCart)
+    {
+        _logger.LogInformation("Creating SessionLineItemOptions");
+        var listOfLineItemOptios = new List<Stripe.Checkout.SessionLineItemOptions>();
+
+        foreach (var product in shoppingCart.Products)
+        {
+            var sessionLineItemOptions = new Stripe.Checkout.SessionLineItemOptions
+            {
+                Price = product.StripeProductPriceId,
+                Quantity = product.Amount
+            };
+
+            listOfLineItemOptios.Add(sessionLineItemOptions);
+        }
+        return listOfLineItemOptios;
+    }
+
+    private async Task<Stripe.Checkout.SessionPaymentIntentDataOptions> CreateSessionPaymentIntentDataOptions(ShoppingCart shoppingCart, string userId) {
+        _logger.LogInformation("Creating SessionPaymentIntentDataOptions");
+        var stripeUserAccountDetails = await _stripeUserAccountDetailsRepository.FindByUserId(userId);
+        decimal totalPrice = shoppingCart.Products.Sum(p => p.Price);
+        int applicationFee = (int)((decimal)0.02 * totalPrice);
+
+        return new Stripe.Checkout.SessionPaymentIntentDataOptions()
+        {
+            ApplicationFeeAmount = applicationFee * 100,
+            TransferData = new Stripe.Checkout.SessionPaymentIntentDataTransferDataOptions
+            {
+                Destination = stripeUserAccountDetails.stripeAccountId
+            }
+        };
     }
 
     private Stripe.StripeClient GetStripeClient()

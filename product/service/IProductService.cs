@@ -9,4 +9,5 @@ public interface IProductService
     public ICollection<ProductType> FindProductTypesForProductCategory(int productCategoryId);
     public ICollection<ProductAttributeKey> FindProductAttributeKeysForProductType(int productTypeId);
     public ICollection<Product> FindProductsForLoggedUser(string sellerId);
+    public void UpdateProductAmounts(ShoppingCart shoppingCart);
 }

@@ -8,5 +8,6 @@ public interface IProductRepository
     ICollection<ProductAttributeKey> GetProductAttributeKeysForProductType(int productTypeId);
     void SaveProduct(Product product);
     public ICollection<Product> GetProductsForLoggedUser(string sellerId);
+    public Product Update(Product product);
 
 }
