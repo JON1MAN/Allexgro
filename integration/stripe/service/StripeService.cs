@@ -149,7 +149,7 @@ public class StripeService : IStripeService
         var stripeClient = GetStripeClient();
 
         var stripeLineItems = CreateSessionLineItemOptions(shoppingCart);
-        var paymentIntentData = await CreateSessionPaymentIntentDataOptions(shoppingCart, userId);
+        var paymentIntentData = await CreateSessionPaymentIntentDataOptions(shoppingCart);
 
         var options = new Stripe.Checkout.SessionCreateOptions
         {
@@ -185,9 +185,9 @@ public class StripeService : IStripeService
         return listOfLineItemOptios;
     }
 
-    private async Task<Stripe.Checkout.SessionPaymentIntentDataOptions> CreateSessionPaymentIntentDataOptions(ShoppingCart shoppingCart, string userId) {
+    private async Task<Stripe.Checkout.SessionPaymentIntentDataOptions> CreateSessionPaymentIntentDataOptions(ShoppingCart shoppingCart) {
         _logger.LogInformation("Creating SessionPaymentIntentDataOptions");
-        var stripeUserAccountDetails = await _stripeUserAccountDetailsRepository.FindByUserId(userId);
+        var stripeUserAccountDetails = await _stripeUserAccountDetailsRepository.FindByUserId(shoppingCart.Products[0].UserId);
         decimal totalPrice = shoppingCart.Products.Sum(p => p.Price);
         int applicationFee = (int)((decimal)0.02 * totalPrice);
 
