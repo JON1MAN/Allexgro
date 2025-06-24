@@ -2,6 +2,34 @@
 # Allexgro
 Allexgro is my lightweight vision of [Allegro](https://allegro.pl/) 
 
+## Table of Contents
+
+- [Allexgro](#allexgro)
+  - [Stack](#stack)
+  - [How to launch application](#how-to-launch-application)
+
+- [API](#api)
+  - [RegistrationController](#registrationcontroller)
+    - [`POST /api/v1/registration`](#post-apiv1registration)
+  - [AuthorizationController](#authorizationcontroller)
+    - [`POST /api/v1/authorization`](#post-apiv1authorization)
+  - [ProductController](#productcontroller)
+    - [`GET /api/v1/product/{productId}`](#get-apiv1productproductid)
+    - [`GET /api/v1/product`](#get-apiv1product)
+    - [`GET /api/v1/product/my`](#get-apiv1productmy)
+    - [`POST /api/v1/product`](#post-apiv1product)
+    - [`GET /api/v1/product/product-categories`](#get-apiv1productproduct-categories)
+    - [`GET /api/v1/product/product-categories/{categoryId}/product-types`](#get-apiv1productproduct-categoriescategoryidproduct-types)
+    - [`GET /api/v1/product/product-categories/product-types/{typeId}/attributes`](#get-apiv1productproduct-categoriesproduct-typestypeidattributes)
+    - [`POST /api/v1/search`](#post-apiv1search)
+  - [UserController](#usercontroller)
+    - [`GET /api/v1/user/me`](#get-apiv1userme)
+    - [`PUT /api/v1/user`](#put-apiv1user)
+  - [CheckoutController](#checkoutcontroller)
+    - [`PUT /api/v1/checkout`](#put-apiv1checkout)
+
+- [Resources](#resources-that-helped-me-in-building-this-project)
+
 ## Stack:
 - backend - **C#** ASP .NET 9.0.201
 - database - **PostgreSQL** 17.4
