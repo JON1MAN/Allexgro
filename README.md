@@ -750,3 +750,52 @@ Creates a Stripe Checkout Session for the currently authenticated user based on 
 | `products`  | `List<ProductDTO>`     | List of products the user intends to buy.  |
 
 
+### Resources that helped me in building this project:
+https://www.nuget.org/packages/Npgsql.DependencyInjection \
+https://developers.redhat.com/articles/2024/01/11/connect-dotnet-app-external-postgresql-database#setting_up__net_data_access_for_postgresql \
+https://stackoverflow.com/questions/53724202/asp-net-core-httpsredirectionmiddleware-failed-to-determine-the-https-port-for-r \
+https://tailwindcss.com/docs/installation/using-vite \
+https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-9.0 \
+https://www.reddit.com/r/dotnet/comments/1barp0b/starting_to_really_hate_the_way_aspnet_doesnt_cors/ \
+https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-8.0#uc1 \
+https://gondi-sai.medium.com/building-nested-components-with-child-routes-in-react-react-no-14-c9152db9f8cc \
+https://sajadshafi.com/blog/dotnet-webapi-user-registration-login \
+https://www.nuget.org/packages/Microsoft.AspNetCore.Identity.EntityFrameworkCore \
+https://medium.com/@sajadshafi/jwt-authentication-in-c-net-core-7-web-api-b825b3aee11d \
+https://learn.microsoft.com/en-us/aspnet/core/security/authentication/configure-jwt-bearer-authentication?view=aspnetcore-9.0 \
+https://www.nuget.org/packages/Microsoft.AspNetCore.Authentication.JwtBearer \
+https://www.nuget.org/packages/Microsoft.AspNetCore.Identity \
+https://jwt.io/ \
+https://www.npgsql.org/doc/types/datetime.html \
+https://learn.microsoft.com/pl-pl/dotnet/api/system.datetime.touniversaltime?view=net-9.0 \
+https://blog.wildermuth.com/2018/04/10/Using-JwtBearer-Authentication-in-an-API-only-ASP-NET-Core-Project/ \
+https://dribbble.com/shots/26005535-Smarter-financial-Landing-Page \
+https://liquid-glass-eta.vercel.app/ \
+https://codesandbox.io/p/sandbox/iphone-react-component-forked-34jnzl \
+https://dev.to/kevinbism/recreating-apples-liquid-glass-effect-with-pure-css-3gpl \
+https://www.pexels.com/video/explosion-of-white-smoke-in-dark-background-7566041/ \
+https://medium.com/@ravipatel.it/managing-configuration-and-environment-variables-in-net-b1c10d69d3d2 
+
+**stripe** \
+https://www.nuget.org/packages/Stripe.net/ \
+https://docs.stripe.com/ \
+https://docs.stripe.com/payments \
+https://docs.stripe.com/development \
+https://docs.stripe.com/connect \
+https://docs.stripe.com/workflows \
+https://docs.stripe.com/connect/testing#payouts \
+https://docs.stripe.com/testing?architecture-style=resources&testing-method=card-numbers \
+https://docs.stripe.com/api/account_links/create?lang=dotnet \
+https://stackoverflow.com/questions/77749876/stripe-connect-express-test-account-not-updating-company-address \
+https://docs.stripe.com/api/accounts/login_link/object?lang=dotnet \
+https://docs.stripe.com/payments/checkout \
+https://docs.stripe.com/api/checkout/sessions \
+https://docs.stripe.com/checkout/quickstart?client=react \
+https://docs.stripe.com/payments/accept-a-payment?platform=web&ui=stripe-hosted&shell=true&api=true#create-product-prices-upfront \
+https://docs.stripe.com/api/checkout/sessions/create \
+https://docs.stripe.com/connect/charges \
+https://docs.stripe.com/api/prices/create 
+https://docs.stripe.com/api/products/object \
+https://stackoverflow.com/questions/46183171/how-to-add-custom-header-to-asp-net-core-web-api-response \
+https://docs.stripe.com/testing \
+
