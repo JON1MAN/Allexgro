@@ -49,12 +49,4 @@ public class UserController : ControllerBase
 
         return Ok(_userMapper.Map<UserDTO>(response));
     }
-
-    [HttpGet("key")]
-    [ProducesResponseType(200)]
-    public ActionResult<string> GetKey()
-    {
-        string key = _stripe.SecretKey;
-        return Ok(key);
-    }
 }

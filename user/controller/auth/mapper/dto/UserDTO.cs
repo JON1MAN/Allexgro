@@ -6,6 +6,4 @@ public class UserDTO
     public DateTime CreatedAt { get; set; }
     public string UpdateStripeAccountLinkUrl { get; set;}
     public string? Description { get; set; }
-
-    //TODO: add discription / phonenumber / createdAt / full name
 }
